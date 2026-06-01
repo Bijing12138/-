@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>H7项目 - 外饰方案-A</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --bg: #020914;
+      --panel: rgba(6, 19, 33, .88);
+      --line: #1769d8;
+      --line-soft: rgba(33, 115, 230, .55);
+      --text: #eef7ff;
+      --muted: #9eb4c8;
+      --blue: #1677ff;
+      --cyan: #20d7ff;
+      --orange: #ff6b2d;
+      --green: #00df8a;
+      --yellow: #ffd438;
+      --red: #ff3732;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: radial-gradient(circle at 58% 42%, #0b2a46 0, #03101c 42%, #020914 100%);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0,119,255,.11) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,119,255,.10) 1px, transparent 1px),
+        radial-gradient(circle at 50% 0%, rgba(23,119,255,.14), transparent 34%);
+      background-size: 24px 24px, 24px 24px, 100% 100%;
+      opacity: .7;
+    }
+    .topbar {
+      position: relative;
+      z-index: 3;
+      height: 64px;
+      display: grid;
+      grid-template-columns: 220px 1fr 220px;
+      align-items: center;
+      padding: 0 22px;
+    }
+    .back {
+      justify-self: start;
+      height: 38px;
+      padding: 0 18px;
+      border: 1px solid #263b54;
+      border-radius: 10px;
+      background: rgba(7,19,33,.9);
+      color: #dce8f4;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .back:hover { border-color: #1677ff; color: #fff; }
+    .brand {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+    .logo { width: 38px; height: 20px; position: relative; }
+    .logo::before,.logo::after{content:"";position:absolute;border:2px solid #1683ff;transform:skew(-25deg);border-radius:2px}.logo::before{width:25px;height:12px;left:0;top:5px}.logo::after{width:23px;height:12px;left:15px;top:1px;border-left:0}
+    .top-spacer { justify-self: end; width: 1px; height: 1px; }
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100vw;
+      height: calc(100vh - 64px);
+      padding: 0 18px 18px;
+      display: grid;
+      grid-template-columns: 63% 36%;
+      gap: 18px;
+    }
+    .panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(37,112,231,.72);
+      border-radius: 12px;
+      background: linear-gradient(180deg,rgba(10,28,46,.92),rgba(3,13,24,.92));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 16px 40px rgba(0,0,0,.28);
+    }
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(0,119,255,.12) 1px, transparent 1px), linear-gradient(90deg, rgba(0,119,255,.10) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: .42;
+    }
+    .panel-hd {
+      position: relative;
+      z-index: 1;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: linear-gradient(90deg, rgba(12,70,141,.9), rgba(9,37,67,.72));
+      border-bottom: 1px solid rgba(37,112,231,.35);
+    }
+    .panel-title { font-size: 28px; font-weight: 900; letter-spacing: .5px; }
+    .loops { position: relative; width: 72px; height: 32px; }
+    .loops span { position: absolute; top: 0; width: 42px; height: 42px; border-radius: 50%; background: rgba(170,214,232,.62); mix-blend-mode: screen; }
+    .loops span:first-child { left: 0; }
+    .loops span:last-child { right: 0; }
+    .left-panel { display: grid; grid-template-rows: 56px 1fr; }
+    .car-stage {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 34px 30px;
+    }
+    .car-stage::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 38%;
+      background-image: linear-gradient(rgba(0,119,255,.18) 1px, transparent 1px), linear-gradient(90deg, rgba(0,119,255,.16) 1px, transparent 1px);
+      background-size: 30px 30px;
+      transform: perspective(620px) rotateX(58deg);
+      transform-origin: bottom;
+      pointer-events: none;
+      opacity: .66;
+    }
+    .car { position: relative; z-index: 1; width: min(900px, 92%); max-height: 82%; filter: drop-shadow(0 30px 30px rgba(0,0,0,.65)); }
+    .right { display: grid; grid-template-rows: 1fr 1fr; gap: 18px; }
+    .card { display: grid; grid-template-rows: 56px 1fr; }
+    .radar-body {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      padding: 8px 18px 12px;
+    }
+    .radar { width: min(390px, 88%); height: min(250px, 92%); overflow: visible; }
+    .legend { display: none; }
+    .data-body {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      align-content: center;
+      gap: 15px;
+      padding: 20px 34px 22px;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 116px 1fr 44px;
+      align-items: center;
+      gap: 20px;
+      font-size: 19px;
+      font-weight: 800;
+      color: rgba(255,255,255,.92);
+    }
+    .track {
+      position: relative;
+      height: 10px;
+      border-radius: 20px;
+      background: rgba(22,61,105,.95);
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+    .track::before,.track::after{content:"";position:absolute;top:-18px;bottom:-18px;width:1px;border-left:2px dotted rgba(255,255,255,.45)}
+    .track::before{left:35%}.track::after{left:70%}
+    .fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg,#2c7dff,#20d7ff); box-shadow: 0 0 14px rgba(32,215,255,.45); }
+    .fill.warn { background: linear-gradient(90deg,#ffd66b,#ff7b00); }
+    .fill.bad { background: linear-gradient(90deg,#ff9a7e,#ff351f); }
+    .value { text-align: right; font-size: 20px; font-weight: 900; color: #9bd2ee; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    @media (max-width: 1200px) {
+      body { overflow: auto; }
+      .topbar { grid-template-columns: 1fr; height: auto; gap: 12px; padding: 14px; }
+      .back,.top-spacer { justify-self: center; }
+      .page { height: auto; grid-template-columns: 1fr; }
+      .left-panel { min-height: 560px; }
+      .right { grid-template-rows: auto; }
+      .card { min-height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar"><button class="back" onclick="history.back()">‹ 返回</button><div class="brand"><div class="logo"></div><span>H7造型评审汇报</span></div><div class="top-spacer"></div></header>
+  <main class="page">
+    <section class="panel left-panel">
+      <div class="panel-hd"><div class="panel-title">外饰方案-A</div></div>
+      <div class="car-stage" aria-label="H7 外饰方案车辆">
+        <svg class="car" viewBox="0 0 980 470" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="白色SUV外饰方案">
+          <defs>
+            <linearGradient id="paint" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset=".42" stop-color="#e8e8e4"/>
+              <stop offset=".72" stop-color="#b7b8b4"/>
+              <stop offset="1" stop-color="#55575a"/>
+            </linearGradient>
+            <linearGradient id="glass2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#0a1017"/>
+              <stop offset=".55" stop-color="#34383c"/>
+              <stop offset="1" stop-color="#0a0d12"/>
+            </linearGradient>
+            <radialGradient id="shine" cx=".45" cy=".12" r=".9">
+              <stop offset="0" stop-color="#fff" stop-opacity=".9"/>
+              <stop offset=".45" stop-color="#fff" stop-opacity=".18"/>
+              <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="softShadow"><feGaussianBlur stdDeviation="13"/></filter>
+          </defs>
+          <ellipse cx="470" cy="426" rx="404" ry="30" fill="#000" opacity=".5" filter="url(#softShadow)"/>
+          <path d="M70 319 C94 234 151 203 255 188 L402 116 C489 86 659 92 761 135 C820 160 856 209 884 281 L926 294 C950 303 958 333 941 362 C925 389 883 396 828 388 L157 392 C102 395 59 380 49 349 C45 336 52 323 70 319Z" fill="url(#paint)"/>
+          <path d="M294 189 L421 130 C492 107 622 111 731 149 C766 169 790 205 804 255 L599 244 L515 165 L388 180 Z" fill="url(#glass2)"/>
+          <path d="M423 135 C492 112 619 116 724 151" fill="none" stroke="#fff" stroke-opacity=".88" stroke-width="8" stroke-linecap="round"/>
+          <path d="M84 296 C152 266 223 250 299 248 C281 288 222 316 104 329 Z" fill="#f8fbff"/>
+          <path d="M100 311 C160 288 222 277 279 277" stroke="#202326" stroke-width="14" stroke-linecap="round"/>
+          <path d="M126 223 C189 205 248 194 313 190" stroke="#f8fbff" stroke-width="10" stroke-linecap="round"/>
+          <path d="M92 236 C149 216 206 204 268 198" stroke="#151719" stroke-width="18" stroke-linecap="round"/>
+          <path d="M760 270 L840 277 C862 279 875 294 873 312 L760 306 Z" fill="#f8fbff"/>
+          <path d="M774 290 L846 294" stroke="#24272b" stroke-width="12" stroke-linecap="round"/>
+          <path d="M67 343 L276 342 L250 375 L82 373 Z" fill="#090b0e"/>
+          <rect x="146" y="317" width="95" height="48" rx="4" fill="#08090c" stroke="#34373c" stroke-width="3"/>
+          <text x="166" y="349" fill="#ff2b19" font-size="22" font-weight="900">P-301</text>
+          <path d="M310 256 C382 247 509 240 668 245" stroke="#f5f5f2" stroke-width="14" stroke-linecap="round" opacity=".76"/>
+          <path d="M366 253 C440 250 548 249 654 254" stroke="#8b8d8f" stroke-width="3" opacity=".55"/>
+          <path d="M334 287 C430 277 576 278 709 291" stroke="#fafafa" stroke-width="8" stroke-linecap="round" opacity=".7"/>
+          <path d="M590 174 L622 251" stroke="#6c6e70" stroke-width="2" opacity=".7"/>
+          <path d="M688 160 L725 260" stroke="#6c6e70" stroke-width="2" opacity=".7"/>
+          <path d="M791 229 L836 229 C849 229 858 238 858 250 L803 253 Z" fill="#f5f6f4"/>
+          <path d="M642 260 C653 244 684 244 703 259" fill="none" stroke="#f9f9f6" stroke-width="8" stroke-linecap="round"/>
+          <path d="M75 319 C144 294 236 290 332 298 C470 309 612 309 862 306" fill="none" stroke="#fff" stroke-opacity=".76" stroke-width="4"/>
+          <circle cx="260" cy="378" r="72" fill="#111315"/>
+          <circle cx="260" cy="378" r="52" fill="#c9cacc"/>
+          <circle cx="260" cy="378" r="24" fill="#2b2d31"/>
+          <g stroke="#575b60" stroke-width="8" stroke-linecap="round">
+            <path d="M260 326 L260 430"/><path d="M208 378 L312 378"/><path d="M224 342 L296 414"/><path d="M296 342 L224 414"/>
+          </g>
+          <circle cx="754" cy="376" r="71" fill="#111315"/>
+          <circle cx="754" cy="376" r="52" fill="#c9cacc"/>
+          <circle cx="754" cy="376" r="24" fill="#2b2d31"/>
+          <g stroke="#575b60" stroke-width="8" stroke-linecap="round">
+            <path d="M754 324 L754 428"/><path d="M702 376 L806 376"/><path d="M718 340 L790 412"/><path d="M790 340 L718 412"/>
+          </g>
+          <path d="M120 162 C124 175 120 190 104 203" stroke="#ff3840" stroke-width="4" fill="none"/>
+          <path d="M136 164 C139 184 133 204 117 222" stroke="#ff3840" stroke-width="4" fill="none"/>
+          <path d="M72 319 C110 237 174 206 270 190" fill="url(#shine)" opacity=".72"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="right">
+      <article class="panel card">
+        <div class="panel-hd">
+          <div class="panel-title">雷达图分析</div>
+          <div class="loops" aria-hidden="true"><span></span><span></span></div>
+        </div>
+        <div class="radar-body">
+          <svg class="radar" viewBox="0 0 520 360" xmlns="http://www.w3.org/2000/svg" aria-label="雷达图分析">
+            <g transform="translate(260 174)">
+              <polygon points="0,-142 135,-44 83,116 -83,116 -135,-44" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="4"/>
+              <polygon points="0,-92 88,-28 54,75 -54,75 -88,-28" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="3"/>
+              <polygon points="0,-42 40,-13 25,35 -25,35 -40,-13" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="3"/>
+              <g stroke="rgba(255,255,255,.55)" stroke-width="3">
+                <line x1="0" y1="0" x2="0" y2="-142"/>
+                <line x1="0" y1="0" x2="135" y2="-44"/>
+                <line x1="0" y1="0" x2="83" y2="116"/>
+                <line x1="0" y1="0" x2="-83" y2="116"/>
+                <line x1="0" y1="0" x2="-135" y2="-44"/>
+              </g>
+              <polygon points="0,-55 126,-41 63,88 -70,88 -101,-33" fill="rgba(245,176,42,.74)" stroke="#ff6b2d" stroke-width="4"/>
+              <polyline points="0,-55 126,-41 63,88 -70,88 -101,-33" fill="none" stroke="#ff6b2d" stroke-width="4"/>
+              <g fill="#00e887">
+                <circle cx="126" cy="-41" r="7"/>
+                <circle cx="63" cy="88" r="7"/>
+                <circle cx="-101" cy="-33" r="7"/>
+              </g>
+              <g fill="#ffc64b"><circle cx="-70" cy="88" r="7"/></g>
+              <g fill="#ff3226"><circle cx="0" cy="-55" r="7"/></g>
+            </g>
+            <g fill="#f4fbff" font-weight="800" font-size="22" text-anchor="middle">
+              <text x="260" y="34">品牌辨识度</text><text x="260" y="58" font-size="18">5.9</text>
+              <text x="428" y="142">用户接受度</text><text x="428" y="166" font-size="18">9.3</text>
+              <text x="328" y="326">成本控制</text><text x="328" y="350" font-size="18">8.1</text>
+              <text x="176" y="326">工程可行性</text><text x="176" y="350" font-size="18">7.8</text>
+              <text x="78" y="142">造型美观性</text><text x="78" y="166" font-size="18">8.9</text>
+            </g>
+          </svg>
+          <div class="legend">
+            <div><span class="dot" style="background:var(--green)"></span>合格</div>
+            <div><span class="dot" style="background:var(--yellow)"></span>有风险</div>
+            <div><span class="dot" style="background:var(--red)"></span>不合格</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel card">
+        <div class="panel-hd">
+          <div class="panel-title">数据分析</div>
+          <div class="loops" aria-hidden="true"><span></span><span></span></div>
+        </div>
+        <div class="data-body">
+          <div class="bar-row"><span>品牌辨识度</span><div class="track"><div class="fill bad" style="width:59%"></div></div><span class="value">5.9</span></div>
+          <div class="bar-row"><span>造型美观性</span><div class="track"><div class="fill" style="width:89%"></div></div><span class="value">8.9</span></div>
+          <div class="bar-row"><span>用户接受度</span><div class="track"><div class="fill" style="width:93%"></div></div><span class="value">9.3</span></div>
+          <div class="bar-row"><span>工程可行性</span><div class="track"><div class="fill warn" style="width:78%"></div></div><span class="value">7.8</span></div>
+          <div class="bar-row"><span>成本控制</span><div class="track"><div class="fill" style="width:81%"></div></div><span class="value">8.1</span></div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

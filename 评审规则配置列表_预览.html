@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>评审规则配置列表</title>
+  <style>
+    *{box-sizing:border-box}:root{--bg:#020914;--panel:#071321;--line:#1c3148;--line2:#263b54;--text:#eef7ff;--muted:#8da0b5;--blue:#1677ff;--cyan:#29a8ff;--danger:#ff7373}
+    body{margin:0;height:100vh;overflow:hidden;background:radial-gradient(circle at 50% 12%,#0a2744 0,#03101c 42%,#020914 100%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",Arial,sans-serif}
+    .app{height:100vh;display:grid;grid-template-rows:70px 1fr;padding:18px;gap:14px}
+    .topbar{display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:16px;font-size:24px;font-weight:900}.logo{width:40px;height:22px;position:relative}.logo:before,.logo:after{content:"";position:absolute;border:3px solid #1683ff;transform:skew(-25deg);border-radius:2px}.logo:before{width:26px;height:13px;left:0;top:4px}.logo:after{width:24px;height:13px;left:16px;top:0;border-left:0}.back{height:40px;padding:0 18px;border:1px solid var(--line2);border-radius:9px;background:rgba(255,255,255,.04);color:#fff;font-size:15px;cursor:pointer}.back:hover{border-color:var(--cyan)}
+    .panel{min-height:0;background:linear-gradient(180deg,rgba(10,28,46,.92),rgba(3,13,24,.92));border:1px solid var(--line);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 16px 40px rgba(0,0,0,.28);overflow:hidden}
+    .listView{display:grid;grid-template-rows:66px 1fr}.toolbar{height:66px;display:flex;align-items:center;gap:12px;padding:0 18px;border-bottom:1px solid var(--line)}.toolbar h1{font-size:20px;margin:0 20px 0 0}.btn{height:38px;padding:0 16px;border:1px solid #315371;border-radius:8px;background:#071421;color:#dce8f4;font-weight:900;cursor:pointer}.btn:hover{border-color:var(--cyan);color:#fff}.btn.primary{border:0;background:linear-gradient(135deg,#084cff,#0d65ff);color:#fff}.btn.danger{color:#ff8585;border-color:#6b3340;background:#20111a}.tableBox{padding:16px;overflow:auto}.rulesTable{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}.rulesTable th,.rulesTable td{height:56px;padding:0 16px;text-align:left;border-bottom:1px solid var(--line);background:rgba(7,19,33,.9);color:#dce8f4}.rulesTable th{background:#091826;color:#eef7ff;font-weight:900}.rulesTable tr:last-child td{border-bottom:0}.ruleOps{display:flex;gap:14px}.link{color:var(--cyan);font-weight:900;cursor:pointer}.link.danger{color:var(--danger)}
+    .empty{min-height:220px;display:grid;place-items:center;border:1px dashed #315371;border-radius:10px;color:var(--muted);background:rgba(255,255,255,.025)}
+    .editorView{display:none;grid-template-rows:58px 1fr}.editorView.show{display:grid}.tabs{display:flex;align-items:flex-end;gap:8px;padding:0 14px;border-bottom:1px solid var(--line)}.tab{height:58px;padding:0 20px;border:0;border-bottom:4px solid transparent;background:transparent;color:#8da3ba;font-size:17px;font-weight:900;cursor:pointer}.tab.active{color:#fff;border-bottom-color:var(--blue);background:linear-gradient(180deg,transparent,rgba(23,119,255,.13))}
+    .editorBody{min-height:0;display:grid;grid-template-columns:310px 1fr 300px;gap:14px;padding:14px}.treePanel,.componentPanel,.canvasPanel,.paramPanel{min-height:0;background:linear-gradient(180deg,rgba(10,28,46,.94),rgba(3,13,24,.94));border:1px solid var(--line);border-radius:12px;overflow:hidden}.panelHd{height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line);font-weight:900}.panelHd button{height:30px;padding:0 10px;border:1px solid #315371;border-radius:7px;background:#071421;color:#dce8f4;cursor:pointer}
+    .tree{height:calc(100% - 52px);padding:12px;overflow:auto}.treeRow{height:36px;display:flex;align-items:center;gap:8px;border-radius:8px;padding:0 10px;color:#dce8f4;cursor:pointer}.treeRow:hover,.treeRow.active{background:linear-gradient(90deg,rgba(19,96,189,.55),rgba(10,43,76,.45))}.treeRow .ops{margin-left:auto;display:none;gap:6px}.treeRow:hover .ops,.treeRow.active .ops{display:flex}.ops button{height:24px;padding:0 7px;border:1px solid #315371;border-radius:5px;background:#071421;color:#dce8f4;cursor:pointer}.ops .danger{color:var(--danger)}
+    .directoryPreview{padding:22px;display:grid;gap:16px;overflow:auto}.previewTitle{font-size:24px;font-weight:900}.formRow{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}.formRow label{font-weight:900}.mock{min-height:42px;border:1px solid #27435c;border-radius:8px;background:#061421;color:#9fb2c5;padding:10px 12px}.mock.upload{min-height:170px;border-style:dashed;display:grid;place-items:center;text-align:center}
+    .designerGrid{display:none;grid-template-columns:190px 1fr;gap:14px;min-height:0}.componentMode .designerGrid{display:grid}.componentMode .directoryPreview{display:none}.componentList{padding:12px;display:grid;gap:10px;overflow:auto}.componentItem{height:42px;display:flex;align-items:center;gap:10px;padding:0 12px;border:1px solid #263b54;border-radius:8px;background:#071421;color:#dce8f4;font-weight:900;cursor:grab}.componentItem:hover{border-color:var(--cyan)}.componentIcon{width:24px;height:24px;border-radius:6px;background:#0a315f;display:grid;place-items:center;color:#8fd3ff}
+    .canvas{height:calc(100% - 52px);padding:18px;overflow:auto;display:grid;align-content:start;gap:14px}.hint{min-height:140px;border:1px dashed #315371;border-radius:12px;display:grid;place-items:center;text-align:center;color:var(--muted);background:rgba(255,255,255,.025);padding:18px}.fieldBlock{border:1px solid #263b54;border-radius:10px;background:#071421;padding:14px;display:grid;gap:10px;cursor:pointer}.fieldBlock.active{border-color:var(--blue);box-shadow:0 0 0 2px rgba(22,119,255,.18)}.fieldBlock label{font-weight:900;color:#eef7ff}
+    .paramBody{height:calc(100% - 52px);padding:14px;display:grid;align-content:start;gap:12px;overflow:auto}.paramField{display:grid;gap:7px}.paramField label{font-weight:900;color:#dce8f4}.paramField input,.paramField select,.paramField textarea{min-height:38px;border:1px solid #27435c;border-radius:8px;background:#061421;color:#eef7ff;padding:8px 10px;font:inherit}.paramField textarea{min-height:78px;resize:vertical}.toast{position:fixed;top:22px;left:50%;transform:translateX(-50%) translateY(-12px);opacity:0;z-index:20;padding:10px 18px;border-radius:8px;background:rgba(6,18,33,.96);border:1px solid #1f4b78;color:#eef7ff;transition:.2s ease}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <button class="back" id="backBtn">‹　返回</button>
+    <div class="brand"><div class="logo"></div><span>评审规则配置</span></div>
+    <button class="btn primary" id="saveBtn">保存</button>
+  </header>
+
+  <section class="panel listView" id="listView">
+    <div class="toolbar">
+      <h1>评审规则配置列表</h1>
+      <button class="btn primary" id="createBtn">创建</button>
+      <button class="btn danger" id="batchDeleteBtn">删除</button>
+    </div>
+    <div class="tableBox">
+      <table class="rulesTable">
+        <thead>
+          <tr><th style="width:58px;"><input type="checkbox" id="selectAll"></th><th>规则名称</th><th>规则编号</th><th>创建人</th><th>创建时间</th><th style="width:170px;">操作</th></tr>
+        </thead>
+        <tbody id="ruleBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel editorView" id="editorView">
+    <div class="tabs">
+      <button class="tab active" data-tab="directory">评审目录配置</button>
+      <button class="tab" data-tab="component">组件创建</button>
+      <button class="btn" id="backListBtn" style="margin-left:auto;margin-bottom:10px;">返回列表</button>
+    </div>
+    <div class="editorBody" id="editorBody">
+      <aside class="treePanel">
+        <div class="panelHd"><span>评审树</span><button id="addNodeBtn">新增节点</button></div>
+        <div class="tree" id="treeBox"></div>
+      </aside>
+      <div class="designerGrid">
+        <aside class="componentPanel">
+          <div class="panelHd">组件库</div>
+          <div class="componentList">
+            <div class="componentItem" draggable="true" data-type="number"><span class="componentIcon">#</span>编号组件</div>
+            <div class="componentItem" draggable="true" data-type="tag"><span class="componentIcon">T</span>标签选择</div>
+            <div class="componentItem" draggable="true" data-type="text"><span class="componentIcon">A</span>单行文本</div>
+            <div class="componentItem" draggable="true" data-type="textarea"><span class="componentIcon">¶</span>多行文本</div>
+            <div class="componentItem" draggable="true" data-type="image"><span class="componentIcon">图</span>图片上传</div>
+          </div>
+        </aside>
+        <section class="canvasPanel">
+          <div class="panelHd"><span id="canvasTitle">后45</span><button id="clearCanvasBtn">清空</button></div>
+          <div class="canvas" id="canvasBox"></div>
+        </section>
+      </div>
+      <section class="canvasPanel directoryPreview" id="directoryPreview"></section>
+      <aside class="paramPanel">
+        <div class="panelHd">组件参数</div>
+        <div class="paramBody" id="paramBody"></div>
+      </aside>
+    </div>
+  </section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=id=>document.getElementById(id);
+let rules=[
+  {id:1,name:'H7外饰评审规则',no:'RULE-EXT-H7',creator:'张晨',createdAt:'2026-06-01 10:00'},
+  {id:2,name:'内饰CMF评审规则',no:'RULE-INT-CMF',creator:'李想',createdAt:'2026-06-01 10:30'}
+];
+let activeRuleId=1, activeNode='后45', activeComponentId=null, draggedType='';
+let treeData=[
+  {name:'方案 a',children:[
+    {name:'外饰',children:['前','前45','侧','后45','后','导入图','倒计导入图','外饰视频']},
+    {name:'内饰',children:['前舱','中控','后舱','全舱','导入图','倒计导入图','内饰视频']}
+  ]}
+];
+let components=[
+  {id:1,type:'number',label:'方案编号',placeholder:'请输入方案编号',required:true},
+  {id:2,type:'tag',label:'标签选择',placeholder:'请选择标签',required:false,options:'火组,格栅,侧围,CMF,科技感'},
+  {id:3,type:'image',label:'效果图上传',placeholder:'点击上传效果图',required:true}
+];
+const meta={number:{label:'编号组件',placeholder:'请输入编号'},tag:{label:'标签选择',placeholder:'请选择标签',options:'前脸,尾部,灯组,格栅,CMF'},text:{label:'单行文本',placeholder:'请输入内容'},textarea:{label:'多行文本',placeholder:'请输入说明'},image:{label:'图片上传',placeholder:'点击上传图片'}};
+function escapeHtml(text){return String(text||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function showToast(text){const t=$('toast');t.textContent=text;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1500)}
+function nowText(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`}
+function renderList(){const body=$('ruleBody');if(!rules.length){body.innerHTML='<tr><td colspan="6"><div class="empty">暂无规则，请点击“创建”新增规则</div></td></tr>';return}body.innerHTML=rules.map(r=>`<tr><td><input type="checkbox" class="ruleCheck" data-id="${r.id}"></td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.no)}</td><td>${escapeHtml(r.creator)}</td><td>${escapeHtml(r.createdAt)}</td><td><div class="ruleOps"><span class="link" data-edit="${r.id}">编辑</span><span class="link danger" data-delete="${r.id}">删除</span></div></td></tr>`).join('')}
+function openEditor(id){activeRuleId=id;$('listView').style.display='none';$('editorView').classList.add('show');renderTree();renderPreview();renderCanvas();renderParam();showToast('已打开规则编辑')}
+function backList(){$('editorView').classList.remove('show');$('listView').style.display='grid';renderList()}
+function renderTree(){const row=(name,level,hasChildren)=>`<div class="treeRow ${name===activeNode?'active':''}" data-node="${escapeHtml(name)}" style="padding-left:${10+level*16}px"><span>${hasChildren?'▼':'•'}</span><span>${escapeHtml(name)}</span><span class="ops"><button data-node-edit="${escapeHtml(name)}">编辑</button><button class="danger" data-node-delete="${escapeHtml(name)}">删除</button></span></div>`;$('treeBox').innerHTML=treeData.map(root=>row(root.name,0,true)+(root.children||[]).map(group=>row(group.name,1,true)+(group.children||[]).map(child=>row(child,2,false)).join('')).join('')).join('')}
+function fieldHtml(item){const req=item.required?'<span style="color:#ff8585"> *</span>':'';let control='';if(item.type==='number'||item.type==='text')control=`<div class="mock">${escapeHtml(item.placeholder)}</div>`;if(item.type==='textarea')control=`<div class="mock" style="min-height:86px">${escapeHtml(item.placeholder)}</div>`;if(item.type==='tag')control=`<div class="mock">${escapeHtml(item.options||'标签一,标签二')}</div>`;if(item.type==='image')control=`<div class="mock upload">${escapeHtml(item.placeholder||'点击上传图片')}</div>`;return `<div class="fieldBlock ${item.id===activeComponentId?'active':''}" data-component="${item.id}"><label>${escapeHtml(item.label)}${req}</label>${control}</div>`}
+function renderPreview(){$('directoryPreview').innerHTML=`<div class="previewTitle">${escapeHtml(activeNode)}</div>${components.map(item=>`<div class="formRow"><label>${escapeHtml(item.label)}${item.required?'<span style="color:#ff8585"> *</span>':''}</label>${fieldHtml(item).replace(/^<div class="fieldBlock[^>]*>|<\/div>$/g,'')}</div>`).join('')}`}
+function renderCanvas(){$('canvasBox').innerHTML=components.length?components.map(fieldHtml).join(''):'<div class="hint">从左侧拖拽组件到这里，生成右侧表单区域</div>';$('canvasTitle').textContent=activeNode}
+function renderParam(){const item=components.find(x=>x.id===activeComponentId);if(!item){$('paramBody').innerHTML='<div class="hint">选中画布中的组件后，可配置标题、必填、占位文案和选项。</div>';return}$('paramBody').innerHTML=`<div class="paramField"><label>组件类型</label><input value="${escapeHtml(meta[item.type]?.label||item.type)}" disabled></div><div class="paramField"><label>字段标题</label><input id="paramLabel" value="${escapeHtml(item.label)}"></div><div class="paramField"><label>占位文案</label><input id="paramPlaceholder" value="${escapeHtml(item.placeholder||'')}"></div><div class="paramField"><label>是否必填</label><select id="paramRequired"><option value="true" ${item.required?'selected':''}>必填</option><option value="false" ${!item.required?'selected':''}>非必填</option></select></div>${item.type==='tag'?`<div class="paramField"><label>标签选项</label><textarea id="paramOptions">${escapeHtml(item.options||'')}</textarea></div>`:''}<button class="btn primary" id="saveParamBtn">保存参数</button><button class="btn danger" id="removeComponentBtn">删除组件</button>`}
+function saveParam(){const item=components.find(x=>x.id===activeComponentId);if(!item)return;item.label=$('paramLabel').value.trim()||item.label;item.placeholder=$('paramPlaceholder').value.trim();item.required=$('paramRequired').value==='true';if(item.type==='tag')item.options=$('paramOptions').value.trim();renderPreview();renderCanvas();renderParam();showToast('组件参数已保存')}
+function renameNode(oldName){const name=prompt('请输入新的节点名称',oldName);if(!name||name.trim()===oldName)return;treeData.forEach(root=>root.children.forEach(group=>{if(group.name===oldName)group.name=name.trim();group.children=group.children.map(child=>child===oldName?name.trim():child)}));if(activeNode===oldName)activeNode=name.trim();renderTree();renderPreview();renderCanvas();showToast('节点已编辑')}
+function deleteNode(name){if(!confirm(`确认删除节点“${name}”吗？`))return;treeData.forEach(root=>{root.children=root.children.filter(group=>group.name!==name);root.children.forEach(group=>group.children=group.children.filter(child=>child!==name))});if(activeNode===name)activeNode='方案 a';renderTree();renderPreview();renderCanvas();showToast('节点已删除')}
+$('backBtn').onclick=()=>{if(history.length>1)history.back();else location.href='H7造型评审汇报_预览.html'};
+$('saveBtn').onclick=()=>showToast('规则配置已保存');
+$('createBtn').onclick=()=>{const name=prompt('请输入规则名称','新建评审规则');if(!name)return;const no=prompt('请输入规则编号',`RULE-${Date.now().toString().slice(-4)}`);if(!no)return;rules.unshift({id:Date.now(),name:name.trim(),no:no.trim(),creator:'张晨',createdAt:nowText()});renderList();showToast('规则已创建')};
+$('batchDeleteBtn').onclick=()=>{const ids=Array.from(document.querySelectorAll('.ruleCheck:checked')).map(x=>Number(x.dataset.id));if(!ids.length)return showToast('请先选择规则');if(!confirm(`确认删除选中的 ${ids.length} 条规则吗？`))return;rules=rules.filter(r=>!ids.includes(r.id));renderList();showToast('规则已删除')};
+$('selectAll').onchange=e=>document.querySelectorAll('.ruleCheck').forEach(cb=>cb.checked=e.target.checked);
+$('ruleBody').onclick=e=>{const edit=e.target.closest('[data-edit]');const del=e.target.closest('[data-delete]');if(edit)openEditor(Number(edit.dataset.edit));if(del&&confirm('确认删除该规则吗？')){rules=rules.filter(r=>r.id!==Number(del.dataset.delete));renderList();showToast('规则已删除')}};
+$('backListBtn').onclick=backList;
+document.querySelectorAll('[data-tab]').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.remove('active'));btn.classList.add('active');$('editorBody').classList.toggle('componentMode',btn.dataset.tab==='component');renderPreview();renderCanvas();renderParam();showToast(btn.textContent)});
+$('addNodeBtn').onclick=()=>{const name=prompt('请输入节点名称','新节点');if(!name)return;treeData[0].children[0].children.push(name.trim());activeNode=name.trim();renderTree();renderPreview();renderCanvas();showToast('节点已新增')};
+$('treeBox').onclick=e=>{const edit=e.target.closest('[data-node-edit]');const del=e.target.closest('[data-node-delete]');const row=e.target.closest('.treeRow');if(edit){e.stopPropagation();renameNode(edit.dataset.nodeEdit);return}if(del){e.stopPropagation();deleteNode(del.dataset.nodeDelete);return}if(row){activeNode=row.dataset.node;renderTree();renderPreview();renderCanvas();showToast(`已选择节点：${activeNode}`)}};
+document.querySelectorAll('.componentItem').forEach(item=>item.ondragstart=e=>{draggedType=item.dataset.type;e.dataTransfer.setData('text/plain',draggedType)});
+$('canvasBox').ondragover=e=>e.preventDefault();
+$('canvasBox').ondrop=e=>{e.preventDefault();const type=e.dataTransfer.getData('text/plain')||draggedType;const m=meta[type];if(!m)return;const item={id:Date.now(),type,label:m.label,placeholder:m.placeholder||'',required:false,options:m.options||''};components.push(item);activeComponentId=item.id;renderPreview();renderCanvas();renderParam();showToast(`${m.label}已添加`)};
+$('canvasBox').onclick=e=>{const block=e.target.closest('[data-component]');if(!block)return;activeComponentId=Number(block.dataset.component);renderCanvas();renderParam()};
+$('clearCanvasBtn').onclick=()=>{if(!confirm('确认清空当前节点的组件吗？'))return;components=[];activeComponentId=null;renderPreview();renderCanvas();renderParam();showToast('组件已清空')};
+$('paramBody').onclick=e=>{if(e.target.id==='saveParamBtn')saveParam();if(e.target.id==='removeComponentBtn'){components=components.filter(x=>x.id!==activeComponentId);activeComponentId=null;renderPreview();renderCanvas();renderParam();showToast('组件已删除')}};
+renderList();
+</script>
+</body>
+</html>
